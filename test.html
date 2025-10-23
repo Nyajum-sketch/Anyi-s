@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - Crochet Website</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test-card { 
+            border: 2px solid #ccc; 
+            padding: 20px; 
+            margin: 10px; 
+            width: 200px; 
+            display: inline-block;
+            cursor: pointer;
+        }
+        .test-card:hover { background: #f0f0f0; }
+        img { width: 100%; height: 150px; object-fit: cover; }
+    </style>
+</head>
+<body>
+    <h1>Test Page</h1>
+    <p>Click on the images below to test:</p>
+    
+    <div class="test-card" onclick="testClick('bunny')">
+        <img src="images/bunny_front.jpeg" alt="Bunny">
+        <h3>Bunny Test</h3>
+    </div>
+    
+    <div class="test-card" onclick="testClick('dachshund')">
+        <img src="images/dachshund1.jpeg" alt="Dachshund">
+        <h3>Dachshund Test</h3>
+    </div>
+    
+    <div id="result"></div>
+    
+    <script>
+        function testClick(product) {
+            document.getElementById('result').innerHTML = `Clicked on ${product}! Images are loading correctly.`;
+        }
+        
+        // Test if images load
+        window.onload = function() {
+            console.log('Page loaded successfully');
+            const images = document.querySelectorAll('img');
+            images.forEach((img, index) => {
+                img.onload = () => console.log(`Image ${index + 1} loaded successfully`);
+                img.onerror = () => console.log(`Image ${index + 1} failed to load`);
+            });
+        };
+    </script>
+</body>
+</html>

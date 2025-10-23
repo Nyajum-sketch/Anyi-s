@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>fishbow - Handmade with Love</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet"> -->
+     <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Reenie+Beanie&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <img src="./images/fsh_bw_water_color.jpeg" class="nav-logo-icon">
+                <!-- <span>fishbow</span> -->
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link">Home</a></li>
+                <li><a href="#products" class="nav-link">Products</a></li>
+                <li><a href="#about" class="nav-link">About</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
+            </ul>
+            <div class="nav-icons">
+                <button class="cart-btn" id="cartBtn">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cartCount">0</span>
+                </button>
+                <button class="menu-toggle" id="menuToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title">Handmade Crochet Treasures</h1>
+                <p class="hero-subtitle">Each piece is crafted with love, care, and attention to detail</p>
+                <button class="cta-btn" onclick="scrollToProducts()">Shop Now</button>
+            </div>
+            <div class="hero-illustration">
+                <div class="hand-drawn-tree">
+                    <div class="tree-top"></div>
+                    <div class="tree-middle"></div>
+                    <div class="tree-bottom"></div>
+                    <div class="tree-trunk"></div>
+                    <div class="ornaments">
+                        <div class="ornament red"></div>
+                        <div class="ornament yellow"></div>
+                        <div class="ornament red"></div>
+                        <div class="ornament yellow"></div>
+                        <div class="ornament red"></div>
+                    </div>
+                    <div class="tree-topper"></div>
+                </div>
+                <div class="presents">
+                    <div class="present green"></div>
+                    <div class="present yellow"></div>
+                    <div class="present red"></div>
+                    <div class="present pink"></div>
+                </div>
+            </div>
+        </div>
+        <div class="watercolor-bg"></div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products" class="products">
+        <div class="container">
+            <h2 class="section-title">Our Handmade Collection</h2>
+            <div class="product-filters">
+                <button class="filter-btn active" data-filter="all">All Items</button>
+                <button class="filter-btn" data-filter="amigurumi">Amigurumi</button>
+                <button class="filter-btn" data-filter="accessories">Accessories</button>
+                <button class="filter-btn" data-filter="home">Home Decor</button>
+                <button class="filter-btn" data-filter="clothing">Clothing</button>
+            </div>
+            <div class="products-grid" id="productsGrid">
+                <!-- Products will be dynamically loaded -->
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>About Our Craft</h2>
+                    <div class="underneath_about_section">
+                    <p>Welcome to Fish Bw, where every stitch tells a story. Our handmade crochet items are created with passion, patience, and a deep love for the craft.</p>
+                    <p>Each piece is unique, just like the person who will treasure it. From adorable amigurumi to cozy accessories, we bring warmth and joy to your everyday life.</p>
+                     </div>
+                    <div class="craft-features">
+                        <div class="feature">
+                            <i class="fas fa-heart"></i>
+                            <h3>Made with Love</h3>
+                            <p>Every item is crafted with care and attention to detail</p>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-leaf"></i>
+                            <h3>Eco-Friendly</h3>
+                            <p>Using sustainable materials and natural fibers</p>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-star"></i>
+                            <h3>Unique Designs</h3>
+                            <p>Original patterns and one-of-a-kind creations</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-image">
+                    <div class="craft-illustration">
+                        <div class="yarn-balls">
+                            <div class="yarn-ball pink"></div>
+                            <div class="yarn-ball blue"></div>
+                            <div class="yarn-ball green"></div>
+                        </div>
+                        <div class="crochet-hook"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2 class="section-title">Get in Touch</h2>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <h3>Email</h3>
+                            <p>hello@cozycrochet.com</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <div>
+                            <h3>Phone</h3>
+                            <p>+1 (555) 123-4567</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <h3>Location</h3>
+                            <p>123 Craft Street, Art City, AC 12345</p>
+                        </div>
+                    </div>
+                </div>
+                <form class="contact-form">
+                    <input type="text" placeholder="Your Name" required>
+                    <input type="email" placeholder="Your Email" required>
+                    <textarea placeholder="Your Message" rows="5" required></textarea>
+                    <button type="submit" class="submit-btn">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Shopping Cart Modal -->
+    <div class="cart-modal" id="cartModal">
+        <div class="cart-content">
+            <div class="cart-header">
+                <h2>Shopping Cart</h2>
+                <button class="close-cart" id="closeCart">&times;</button>
+            </div>
+            <div class="cart-items" id="cartItems">
+                <!-- Cart items will be dynamically loaded -->
+            </div>
+            <div class="cart-footer">
+                <div class="cart-total">
+                    <strong>Total: $<span id="cartTotal">0.00</span></strong>
+                </div>
+                <button class="checkout-btn" id="checkoutBtn">Checkout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Modal -->
+    <div class="product-modal" id="productModal">
+        <div class="product-modal-content">
+            <button class="close-product" id="closeProduct">&times;</button>
+            <div class="product-modal-body" id="productModalBody">
+                <!-- Product details will be dynamically loaded -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Cozy Crochet Corner</h3>
+                    <p>Handmade with love, crafted with care</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#products">Products</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Customer Service</h3>
+                    <ul>
+                        <li><a href="#">Shipping Info</a></li>
+                        <li><a href="#">Returns</a></li>
+                        <li><a href="#">Size Guide</a></li>
+                        <li><a href="#">FAQ</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Cozy Crochet Corner. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

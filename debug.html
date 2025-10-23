@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug - Crochet Website</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container" style="padding: 50px;">
+        <h1>Debug Test</h1>
+        <div id="debugOutput"></div>
+        <div id="productsGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin-top: 2rem;"></div>
+    </div>
+
+    <script>
+        // Simplified product data for testing
+        const products = [
+            {
+                id: 1,
+                name: "Amigurumi Bunny",
+                description: "Adorable hand-crocheted bunny with soft yarn",
+                price: 25.99,
+                category: "amigurumi",
+                image: "images/bunny_front.jpeg",
+                images: ["images/bunny_front.jpeg", "images/bunny_side.jpeg"],
+                colors: ["Pink", "White", "Brown"],
+                inStock: true
+            },
+            {
+                id: 2,
+                name: "Dachshund Amigurumi",
+                description: "Cute crocheted dachshund with charming details",
+                price: 32.99,
+                category: "amigurumi",
+                image: "images/dachshund1.jpeg",
+                images: ["images/dachshund1.jpeg", "images/dachshund_no_cap.jpeg"],
+                colors: ["Brown", "Black", "White"],
+                inStock: true
+            }
+        ];
+
+        // Debug output
+        function debugLog(message) {
+            const output = document.getElementById('debugOutput');
+            output.innerHTML += `<p>${new Date().toLocaleTimeString()}: ${message}</p>`;
+            console.log(message);
+        }
+
+        // Create Product Card
+        function createProductCard(product) {
+            debugLog(`Creating card for ${product.name}`);
+            
+            const card = document.createElement('div');
+            card.className = 'product-card';
+            
+            const hasMultipleImages = product.images && product.images.length > 1;
+            debugLog(`${product.name} has multiple images: ${hasMultipleImages}`);
+            
+            const galleryIndicator = hasMultipleImages ? 
+                `<div class="gallery-indicator" style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: white; padding: 0.3rem 0.6rem; border-radius: 15px; font-size: 0.8rem;">
+                    <i class="fas fa-images"></i> ${product.images.length}
+                </div>` : '';
+            
+            const navigationArrows = hasMultipleImages ? 
+                `<button class="card-nav-arrow left" onclick="event.stopPropagation(); changeCardImage(${product.id}, -1)" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 35px; height: 35px; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease;">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="card-nav-arrow right" onclick="event.stopPropagation(); changeCardImage(${product.id}, 1)" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 35px; height: 35px; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease;">
+                    <i class="fas fa-chevron-right"></i>
+                </button>` : '';
+            
+            const clickHint = hasMultipleImages ? 
+                `<div class="click-hint" style="position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.7); color: white; padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.8rem; opacity: 0; transition: opacity 0.3s ease;">
+                    <i class="fas fa-expand"></i> Click to view gallery
+                </div>` : '';
+            
+            card.innerHTML = `
+                <div class="product-image" style="position: relative;">
+                    <img id="card-image-${product.id}" src="${product.image}" alt="${product.name}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px; transition: opacity 0.3s ease;">
+                    ${galleryIndicator}
+                    ${navigationArrows}
+                    ${clickHint}
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">${product.name}</h3>
+                    <p class="product-description">${product.description}</p>
+                    <div class="product-price">$${product.price}</div>
+                    <button class="add-to-cart" onclick="addToCart(${product.id})">
+                        Add to Cart
+                    </button>
+                </div>
+            `;
+            
+            // Store current image index for this product
+            if (hasMultipleImages) {
+                window[`cardImageIndex_${product.id}`] = 0;
+            }
+            
+            // Add click event to open product modal
+            card.addEventListener('click', (e) => {
+                debugLog(`Card clicked for ${product.name}`);
+                if (!e.target.classList.contains('add-to-cart') && 
+                    !e.target.closest('.card-nav-arrow') && 
+                    !e.target.classList.contains('gallery-indicator')) {
+                    debugLog(`Opening modal for ${product.name}`);
+                    alert(`Opening modal for ${product.name}`);
+                }
+            });
+            
+            return card;
+        }
+
+        // Change Card Image
+        function changeCardImage(productId, direction) {
+            debugLog(`Changing image for product ${productId}, direction: ${direction}`);
+            const product = products.find(p => p.id === productId);
+            if (!product || !product.images) {
+                debugLog(`Product ${productId} not found or no images`);
+                return;
+            }
+            
+            const currentIndex = window[`cardImageIndex_${productId}`] || 0;
+            let newIndex = currentIndex + direction;
+            
+            if (newIndex < 0) newIndex = product.images.length - 1;
+            if (newIndex >= product.images.length) newIndex = 0;
+            
+            debugLog(`Changing from index ${currentIndex} to ${newIndex}`);
+            
+            // Update the image with smooth transition
+            const cardImage = document.getElementById(`card-image-${productId}`);
+            if (cardImage) {
+                cardImage.style.opacity = '0';
+                setTimeout(() => {
+                    cardImage.src = product.images[newIndex];
+                    cardImage.style.opacity = '1';
+                    debugLog(`Image changed to: ${product.images[newIndex]}`);
+                }, 150);
+            }
+            
+            // Update stored index
+            window[`cardImageIndex_${productId}`] = newIndex;
+        }
+
+        // Add to Cart
+        function addToCart(productId) {
+            debugLog(`Adding product ${productId} to cart`);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            debugLog('Page loaded, initializing...');
+            const productsGrid = document.getElementById('productsGrid');
+            
+            products.forEach(product => {
+                const card = createProductCard(product);
+                productsGrid.appendChild(card);
+            });
+            
+            debugLog('Products loaded successfully');
+        });
+    </script>
+</body>
+</html>
