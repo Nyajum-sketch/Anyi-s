@@ -6,8 +6,8 @@ const products = [
         description: "Adorable hand-crocheted bunny with soft yarn",
         price: 25.99,
         category: "amigurumi",
-        image: "images/bunny_front.jpeg",
-        images: ["images/bunny_front.jpeg", "images/bunny_side.jpeg"],
+    image: "images/bunny_front.png",
+    images: ["images/bunny_front.png", "images/bunny_side.png"],
         colors: ["Pink", "White", "Brown"],
         inStock: true
     },
@@ -17,8 +17,8 @@ const products = [
         description: "Cute crocheted dachshund with charming details",
         price: 32.99,
         category: "amigurumi",
-        image: "images/dachshund1.jpeg",
-        images: ["images/dachshund1.jpeg", "images/dachshund_no_cap.jpeg"],
+    image: "images/dachshund1.png",
+    images: ["images/dachshund1.png", "images/dachshund_no_cap.png"],
         colors: ["Brown", "Black", "White"],
         inStock: true
     },
@@ -28,7 +28,7 @@ const products = [
         description: "Friendly crocheted dinosaur for kids",
         price: 28.99,
         category: "amigurumi",
-        image: "images/dino.jpeg",
+    image: "images/dino.png",
         colors: ["Green", "Blue", "Purple"],
         inStock: true
     },
@@ -38,7 +38,7 @@ const products = [
         description: "Festive crocheted elf for holiday decoration",
         price: 35.99,
         category: "amigurumi",
-        image: "images/elf.jpeg",
+    image: "images/elf.png",
         colors: ["Red", "Green", "White"],
         inStock: true
     },
@@ -48,7 +48,7 @@ const products = [
         description: "Adorable crocheted cow with spots",
         price: 30.99,
         category: "amigurumi",
-        image: "images/moo.jpeg",
+        image: "images/moo.png",
         colors: ["Black & White", "Brown", "Pink"],
         inStock: true
     },
@@ -58,7 +58,7 @@ const products = [
         description: "Mix and match from our collection",
         price: 45.99,
         category: "amigurumi",
-        image: "images/bunny_front.jpeg",
+    image: "images/bunny_front.png",
         colors: ["Various", "Custom", "Mixed"],
         inStock: true
     }
@@ -146,7 +146,8 @@ function displayProducts(productsToShow) {
 function createProductCard(product) {
     console.log('Creating card for:', product.name);
     const card = document.createElement('div');
-    card.className = 'product-card';
+    // add display-card-yarn so cards use the yarn background texture
+    card.className = 'product-card display-card-yarn';
     
     // Add gallery indicator and arrows if product has multiple images
     const hasMultipleImages = product.images && product.images.length > 1;
@@ -168,9 +169,20 @@ function createProductCard(product) {
             <i class="fas fa-expand"></i> Click to view gallery
         </div>` : '';
     
+    // if this product's artwork has transparency (no white box), add a class to avoid forcing a white background
+    const imgClass = (product.id === 5) ? 'no-image-bg' : '';
+    // scale amigurumi thumbnails a bit larger for emphasis
+    const imgWidth = product.category === 'amigurumi' ? '92%' : '84%';
+    const imgMaxH = product.category === 'amigurumi' ? '220px' : '160px';
+    // use cover for specific artwork that benefits from filling the thumbnail (dino, elf)
+    const coverIds = new Set([3, 4]); // product ids for Dino (3) and Elf (4)
+    const objectFit = coverIds.has(product.id) ? 'cover' : 'contain';
+
+    card.dataset.category = product.category; // allow CSS hooks as well
+
     card.innerHTML = `
-        <div class="product-image" style="position: relative;">
-            <img id="card-image-${product.id}" src="${product.image}" alt="${product.name}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px; transition: opacity 0.3s ease;">
+        <div class="product-image" style="position: relative; text-align: center;">
+            <img id="card-image-${product.id}" class="${imgClass}" src="${product.image}" alt="${product.name}" style="width: ${imgWidth}; max-height: ${imgMaxH}; height: auto; object-fit: ${objectFit}; border-radius: 10px; transition: opacity 0.3s ease;">
             ${galleryIndicator}
             ${navigationArrows}
             ${clickHint}

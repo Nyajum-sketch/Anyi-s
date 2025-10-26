@@ -1,16 +1,11 @@
 /* global base size — increases all rem-based sizes site-wide */
 html { 
-    font-size: 130%; /* 18px when browser default is 16px; adjust to taste (100% = 16px) */
+    font-size: 130%;  /* 18px when browser default is 16px; adjust to taste (100% = 16px) */
 }
 .nav-menu{
     font-size: 200%;
 }
-/* product description
-.product-description{
-    font-size: 112%;
-} */
-/* Reset and Base Styles */
-
+/* (background declarations belong inside the `body` rule; removed stray top-level properties) */
 
 * {
     margin: 0;
@@ -22,8 +17,27 @@ body {
     font-family: 'Reenie Beanie', cursive;
     line-height: 1.6;
     color: #333;
+    /* page background: use images/background_blue.png when available, otherwise fall back to a soft background color */
     background-color: #fefefe;
+    background-image: url("./images/background_blue.jpeg");
+    /* make the background image fit horizontally across the viewport width
+       while allowing the height to scale proportionally */
+     /* Tile the background horizontally at its native size to preserve quality */
+     background-repeat: repeat-x;        /* repeat across the x-axis as many times as needed */
+     background-position: top center;   /* anchor to the top center to keep pattern aligned */
+     background-size: auto;              /* do not scale the image — use its native resolution */
+     /* use scroll attachment for tiled backgrounds to avoid visual artifacts on some browsers */
+     background-attachment: scroll;
     overflow-x: hidden;
+}
+
+/* mobile fallback: prefer `cover` so the background fills small screens without gaps */
+@media (max-width: 800px) {
+    body {
+        /* on small screens keep horizontal tiling but prefer centering to avoid ugly crops */
+        background-size: auto;
+        background-position: top center;
+    }
 }
 
 .container {
@@ -58,7 +72,7 @@ body {
 
 .nav-container {
     max-width: 1200px;
-    margin: 0 auto;
+    margin: 69px auto;
     padding: 0 20px;
     display: flex;
     justify-content: space-between;
@@ -66,12 +80,11 @@ body {
 }
 
 .nav-logo {
-    display: flex;
-    align-items: center;
-    font-family: inherit;
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--warm-red);
+  width: 120px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .nav-logo i {
@@ -81,8 +94,9 @@ body {
 
 .nav-logo .nav-logo-icon,
 .nav-logo img[src*="fsh_bw_water_color"] {
-    height: 900px;      /* change this value to make it larger/smaller */
-    width:200px;
+    height: 500rem;
+;      /* change this value to make it larger/smaller */
+    width:250px;
     max-height: 230px;
     display: inline-block;
     vertical-align: middle;
@@ -182,7 +196,8 @@ body {
     align-items: center; 
     position: relative;
     padding-top: 80px;
-    background: linear-gradient(135deg, var(--soft-green) 0%, #ffffff 100%);
+    /* make hero transparent so the site background (background_blue) shows through */
+    background: transparent !important;
 }
 
 .hero-content {
@@ -247,6 +262,8 @@ body {
     width: 200px;
     height: 300px;
 }
+
+/* Ornament and presents placeholders removed (elements were deleted from HTML) */
 
 .tree-top, .tree-middle, .tree-bottom {
     position: absolute;
@@ -404,6 +421,10 @@ body {
     background: radial-gradient(circle at 30% 20%, rgba(143, 188, 143, 0.1) 0%, transparent 50%),
                 radial-gradient(circle at 70% 80%, rgba(255, 107, 107, 0.1) 0%, transparent 50%);
     z-index: 1;
+    pointer-events: none; /* allow clicks to pass through */
+    /* fully hide the watercolor site-level overlay so the body background remains visible */
+    opacity: 0 !important;
+    display: none !important;
 }
 
 /* Products Section */
@@ -448,38 +469,60 @@ body {
 .products-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2rem;
-    margin-top: 2rem;
+    gap: 3rem; /* increased spacing between cards */
+    margin-top: 4rem;
 }
 
+/* Product card background + readable overlay */
 .product-card {
-    /* show the blotch texture as the card background */
-    background-image: url("./images/blotch.png"); /* use a PNG with transparency */
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-
-    /* clip the card to the blotch alpha (use -webkit-mask for better support) */
-    -webkit-mask-image: url("./images/blotch.png");
-    -webkit-mask-size: cover;
-    -webkit-mask-repeat: no-repeat;
-    -webkit-mask-position: center;
-
-    mask-image: url("./images/blotch.png");
-    mask-size: cover;
-    mask-repeat: no-repeat;
-    mask-position: center;
-
-    /* ensure content is clipped and not overflowing the mask */
+    position: relative;
     overflow: hidden;
+    border-radius: 69px;
+    padding: 16px;
+    min-height: 220px; /* adjust as needed */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
 
-    /* keep existing visual styling (move padding to inner wrapper) */
-    border-radius: 0; /* radius comes from the mask shape */
-    padding: 0;
-    box-shadow: 0 10px 30px rgba(44,62,80,0.08);
-    transform: rotate(-1.5deg);
-    transition: transform 0.28s ease, box-shadow 0.28s ease;
+    /* texture image as background (keeps aspect, won't distort element) */
+    background-image: url("./images/display_card_yarn.jpeg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover; /* use 'contain' if you prefer whole image without cropping */
+    background-color: #e9f3e9; /* fallback color if image missing */
+    color: #222;
+}
+
+/* explicit utility class: use yarn texture for display cards (applies on top of .product-card) */
+.display-card-yarn {
+    background-image: url("./images/display_card_yarn.jpeg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+/* subtle translucent overlay to keep text readable while showing texture */
+.product-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    /* tweak rgba alpha to make text lighter/darker over the texture */
+    background: linear-gradient(rgba(255,255,255,0.65), rgba(255,255,255,0.4));
+    pointer-events: none;
+}
+
+/* ensure content sits above overlay */
+.product-card .card-content {
+    position: relative;
     z-index: 2;
+}
+
+/* optional: improve contrast for headings/prices */
+.product-card h3,
+.product-card .price {
+    margin: 0;
+    color: #1a1a1a;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.6);
 }
 
 /* inner container preserves spacing and stacking for content */
@@ -537,6 +580,14 @@ body {
     pointer-events: none;
 }
 
+/* Remove watercolor blotch on product cards so the body background shows through cleanly */
+.product-card::before {
+    display: none !important;
+    background: none !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
 /* stitch-like inner border using repeating-linear-gradient */
 .product-card .stitch {
     position: absolute;
@@ -572,6 +623,32 @@ body {
     background: linear-gradient(180deg, #fff, #fff);
 }
 
+/* remove forced white background for images that are already transparent (e.g., moo.png silhouette) */
+.product-image img.no-image-bg {
+    background: transparent !important;
+    box-shadow: none; /* optional: remove shadow if it looks like a white backdrop */
+}
+
+/* apply transparent-background treatment to any PNG image (useful for transparent silhouettes) */
+img[src$=".png"] {
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+/* fallback: slightly larger images for amigurumi when JavaScript isn't present */
+.product-card[data-category="amigurumi"] .product-image img {
+    width: 92%;
+    max-height: 220px;
+}
+
+/* small nudges: move specific card images down a bit */
+/* card-image-2 and card-image-4 correspond to product ids 2 and 4 */
+#card-image-2,
+#card-image-4 {
+    display: block; /* ensure margin applies consistently */
+    margin-top: 35px !important; /* tweak this value to move further/less */
+}
+
 /* info sits above watercolor blotch */
 .product-info {
     position: relative;
@@ -581,7 +658,7 @@ body {
 
 /* name/price/buttons */
 .product-name { font-size: 1.15rem; font-weight: 700; color: var(--text-dark); margin-bottom: 0.35rem; }
-.product-description { color: #666; font-size: 0.95rem; margin-bottom: 0.75rem; }
+.product-description { color: #000000; font-size: 0.95rem; margin-bottom: 0.75rem; }
 .product-price { font-size: 1.15rem; font-weight: 700; color: var(--warm-red); margin-bottom: 0.75rem; }
 
 .add-to-cart {
@@ -627,9 +704,11 @@ body {
 }
 .about-content {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 4rem;
+    /* wider text column so the About copy fills more horizontal space */
+    grid-template-columns: 4fr 1fr;
+    /*gap: 6rem;  larger horizontal gap between text and image */
     align-items: center;
+    width: 100%;
 }
 
 .about-text h2 {
@@ -1247,23 +1326,42 @@ body {
 
 /* point to your image (place file at ./images/display_card_yarn.png) */
 .product-card.display-card-yarn {
+    /* point to your file (jpeg/png) */
     background-image: url("./images/display_card_yarn.jpeg");
-    background-size: cover;
-    background-position: center;
     background-repeat: no-repeat;
-
-    /* ensure no mask or overlay hides the yarn image */
-    -webkit-mask-image: none !important;
-    mask-image: none !important;
-
-    /* keep card shape & spacing */
+    background-position: center;
+    background-size: cover; /* preserves aspect ratio without stretching */
+    padding: 0;
     border-radius: 18px;
-    padding: 1.25rem;
-    overflow: visible;
+    overflow: hidden;
     box-shadow: 0 10px 30px rgba(44,62,80,0.08);
+    transform: rotate(-1.5deg);
+    transition: transform 0.28s ease, box-shadow 0.28s ease;
+    position: relative; /* for overlay */
 }
 
-/* if you wrap content in .card-inner, keep it transparent so yarn shows through */
-.product-card.display-card-yarn .card-inner {
-    background: transparent;
+/* soft light overlay so text remains readable — tweak alpha to taste */
+.product-card.display-card-yarn::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0.6); /* increase to hide texture more, decrease to show texture more */
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* keep card content above overlay */
+.product-card.display-card-yarn .card-inner,
+.product-card.display-card-yarn .card-content,
+.product-card.display-card-yarn .product-info {
+    position: relative;
+    z-index: 2;
+    color: #1a1a1a; /* dark text for contrast */
+    text-shadow: 0 1px 0 rgba(255,255,255,0.7); /* subtle lift for readability */
+}
+
+/* heading/price contrast tweak */
+.product-card.display-card-yarn h3,
+.product-card.display-card-yarn .product-price {
+    color: #122; /* tweak to your preferred dark color */
 }

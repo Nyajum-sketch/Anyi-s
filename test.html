@@ -23,12 +23,12 @@
     <p>Click on the images below to test:</p>
     
     <div class="test-card" onclick="testClick('bunny')">
-        <img src="images/bunny_front.jpeg" alt="Bunny">
+        <img src="images/bunny_front.png" alt="Bunny">
         <h3>Bunny Test</h3>
     </div>
     
     <div class="test-card" onclick="testClick('dachshund')">
-        <img src="images/dachshund1.jpeg" alt="Dachshund">
+        <img src="images/dachshund1.png" alt="Dachshund">
         <h3>Dachshund Test</h3>
     </div>
     
@@ -39,15 +39,50 @@
             document.getElementById('result').innerHTML = `Clicked on ${product}! Images are loading correctly.`;
         }
         
-        // Test if images load
-        window.onload = function() {
+        // Test if images load (and robustly replace heart beside "fishbw")
+        window.addEventListener('DOMContentLoaded', () => {
             console.log('Page loaded successfully');
             const images = document.querySelectorAll('img');
             images.forEach((img, index) => {
                 img.onload = () => console.log(`Image ${index + 1} loaded successfully`);
                 img.onerror = () => console.log(`Image ${index + 1} failed to load`);
             });
-        };
+
+            // Replace heart icon beside 'fishbw' with images/fsh_bw_icon.png
+            const candidateCards = Array.from(document.querySelectorAll('.test-card, .product-card'));
+            candidateCards.forEach(card => {
+                const titleEl = card.querySelector('h3, .product-name');
+                if (!titleEl) return;
+                const normalized = titleEl.textContent.trim().toLowerCase().replace(/\s+/g, '');
+                if (normalized.includes('fishbw') || (normalized.includes('fish') && normalized.includes('bw'))) {
+                    // try common heart selectors
+                    let heart = card.querySelector('img[src*="heart"], img.heart-icon, .heart-icon, i.fa-heart, i.heart');
+                    if (heart) {
+                        if (heart.tagName.toLowerCase() === 'img') {
+                            heart.src = 'images/fsh_bw_icon.png';
+                            heart.alt = 'Fish BW';
+                        } else {
+                            const img = document.createElement('img');
+                            img.src = 'images/fsh_bw_icon.png';
+                            img.alt = 'Fish BW';
+                            img.className = 'replaced-fsh-icon';
+                            heart.parentNode.replaceChild(img, heart);
+                        }
+                        console.log('Replaced icon for', titleEl.textContent);
+                    } else {
+                        // if no existing icon found, append a replacement image
+                        const img = document.createElement('img');
+                        img.src = 'images/fsh_bw_icon.png';
+                        img.alt = 'Fish BW';
+                        img.className = 'replaced-fsh-icon';
+                        img.style.width = '32px';
+                        img.style.height = '32px';
+                        card.appendChild(img);
+                        console.log('Appended fish icon for', titleEl.textContent);
+                    }
+                }
+            });
+        });
     </script>
 </body>
 </html>
